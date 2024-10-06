@@ -23,6 +23,16 @@ Please follow these patterns.
   export const Input = () => {};
   export const MultiSelect = () => {};
   ```
+- Use feature-based structure (`src/features`)
+  - Feature folder name should be lower camel case
+  - Each feature can have:
+    - `components`
+    - `hooks`
+    - `utils`
+    - `constants`
+    - ... (custom folder will be asked for)
+  - Should have a barrel export file for each of the child folders
+  - Should have a barrel export file at the base feature folder, exporting from all of the child folders
 
 ## Coding Styles
 
