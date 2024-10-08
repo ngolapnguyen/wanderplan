@@ -6,7 +6,6 @@ export const Home: React.FC = () => {
 
   return (
     <div className='flex h-full p-8'>
-      {/* Left column: Title and RichTextEditor */}
       <div className='w-1/2 h-full p-4 overflow-hidden flex flex-col'>
         <input
           type='text'
@@ -20,7 +19,6 @@ export const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Right column: Map */}
       <div className='w-1/2 h-full'>
         <Map />
       </div>

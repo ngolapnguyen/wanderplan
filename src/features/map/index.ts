@@ -1,2 +1,2 @@
-// Barrel file for exporting all components from the rte feature
+// Barrel file for exporting all components from the map feature
 export * from './components';

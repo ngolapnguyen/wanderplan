@@ -1,17 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-export interface MainLayoutProps {
-  children?: React.ReactNode;
-}
-
-export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+export const MainLayout: React.FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  useEffect(() => {
-    console.log('MainLayout mounted');
-    console.log('Children:', children);
-  }, [children]);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -58,7 +49,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           </div>
         )}
         <main className='w-full h-full overflow-auto'>
-          {children}
           <Outlet />
         </main>
       </div>
