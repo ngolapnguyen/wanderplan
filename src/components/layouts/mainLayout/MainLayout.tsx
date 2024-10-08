@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 
-// Define the prop types for the MainLayout component
 export interface MainLayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-// MainLayout component: Provides a consistent layout structure for the application
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-  // State to manage the open/closed state of the drawer
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Function to toggle the drawer state
+  useEffect(() => {
+    console.log('MainLayout mounted');
+    console.log('Children:', children);
+  }, [children]);
+
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
-  // Array of menu items
   const menuItems = [
     { label: 'Note 1', href: '#' },
     { label: 'Note 2', href: '#' },
@@ -23,20 +24,14 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   ];
 
   return (
-    // Main container with flex column layout and full minimum height
     <div className='flex flex-col min-h-screen'>
-      {/* Header section */}
-      <header className='bg-blue-600 text-white p-4'>
+      <header className='bg-white text-black p-4 border-b-2'>
         <div className='flex items-center justify-between'>
-          {/* Left section: Hamburger menu, Logo, and Navigation menu */}
           <div className='flex items-center space-x-4'>
-            {/* Hamburger menu button */}
             <button onClick={toggleDrawer} className='text-2xl'>
               ☰
             </button>
-            {/* Logo */}
             <div className='text-xl font-bold'>Wanderplan</div>
-            {/* Navigation menu */}
             <nav className='hidden md:flex space-x-4'>
               {menuItems.map((item, index) => (
                 <a key={index} href={item.href} className='hover:underline'>
@@ -45,15 +40,10 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               ))}
             </nav>
           </div>
-
-          {/* Right section: User avatar placeholder */}
           <div className='w-8 h-8 bg-gray-300 rounded-full'></div>
         </div>
       </header>
-
-      {/* Main content area */}
-      <div className='flex flex-grow'>
-        {/* Drawer - conditionally rendered based on isDrawerOpen state */}
+      <div className='flex h-[calc(100vh-4rem)]'>
         {isDrawerOpen && (
           <div className='bg-gray-100 w-64 p-4'>
             <ul>
@@ -67,8 +57,10 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             </ul>
           </div>
         )}
-        {/* Main content - renders the children passed to the layout */}
-        <main className='flex-grow'>{children}</main>
+        <main className='w-full h-full overflow-auto'>
+          {children}
+          <Outlet />
+        </main>
       </div>
     </div>
   );

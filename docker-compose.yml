@@ -1,0 +1,11 @@
+version: '3.3'
+name: 'wanderplan'
+
+services:
+  electric:
+    image: electricsql/electric
+    env_file: ./.env
+    environment:
+      - DATABASE_URL=$DATABASE_URL
+    ports:
+      - '4321:3000'
