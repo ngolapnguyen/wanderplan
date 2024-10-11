@@ -6,10 +6,15 @@ import { planContent } from './schema/schema';
 
 export type PGliteWithLive = PGlite & { live: unknown };
 
+export type DatabaseContextType = {
+  pg: PGliteWithLive | null;
+  db: ReturnType<typeof drizzle> | null;
+};
+
 let pgInstance: PGliteWithLive;
 let dbInstance: ReturnType<typeof drizzle>;
 
-export const initDatabase = async () => {
+export const initDatabase = async (): Promise<DatabaseContextType> => {
   if (!pgInstance) {
     try {
       pgInstance = (await PGlite.create({
@@ -20,12 +25,10 @@ export const initDatabase = async () => {
         },
       })) as PGliteWithLive;
 
-      // Wait for the PGlite instance to be ready
       while (!pgInstance.ready) {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
-      // Create the table using the exec function
       await pgInstance.exec(`
         CREATE TABLE IF NOT EXISTS plan_content (
           id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -35,28 +38,14 @@ export const initDatabase = async () => {
         );
       `);
 
-      // Initialize Drizzle ORM with schema
       dbInstance = drizzle(pgInstance, { schema: { planContent } });
 
-      // Log the contents of the plan_content table using Drizzle
-      const result = await dbInstance.select().from(planContent).execute();
-      console.log('Contents of plan_content table:', result);
-
-      console.log(
-        'Database initialized, table created, and ORM wrapper initialized successfully'
-      );
+      console.log('Database initialized successfully');
     } catch (error) {
       console.error('Error initializing database:', error);
       throw new Error('Failed to initialize database');
     }
   }
 
-  return { pg: pgInstance, db: dbInstance };
-};
-
-export const getDatabase = async () => {
-  if (!pgInstance || !dbInstance) {
-    return initDatabase();
-  }
   return { pg: pgInstance, db: dbInstance };
 };
